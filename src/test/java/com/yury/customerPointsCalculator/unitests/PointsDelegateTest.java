@@ -12,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
@@ -20,6 +19,9 @@ import org.springframework.http.HttpStatus;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class PointsDelegateTest {
@@ -40,18 +42,18 @@ public class PointsDelegateTest {
     public void init() {
         pointsDelegate.setPersistenceDelegate(persistenceDelegate);
 
-        Mockito.when(persistenceDelegate.getCustomerRepository()).thenReturn(customerRepository);
-        Mockito.when(persistenceDelegate.getTransactionRepository()).thenReturn(transactionRepository);
+        when(persistenceDelegate.getCustomerRepository()).thenReturn(customerRepository);
+        when(persistenceDelegate.getTransactionRepository()).thenReturn(transactionRepository);
     }
 
     @Test
     public void getPoints_ok() {
 
-        Mockito.when(customerRepository.findAll()).thenReturn(getCustomers());
+        when(customerRepository.findAll()).thenReturn(getCustomers());
 
-        Mockito.when(transactionRepository.findAllFromDate(Mockito.any())).thenReturn(getTransactions());
+        when(transactionRepository.findAllFromDate(any())).thenReturn(getTransactions());
 
-        GetPointsResponse response = (GetPointsResponse) pointsDelegate.getPoints();
+        GetPointsResponse response = (GetPointsResponse) pointsDelegate.calculatePoints();
 
         Assertions.assertEquals(response.getStatus(), HttpStatus.OK);
         Assertions.assertEquals(response.getCustomerPointsList().get(0).getTotalPoints(), 90);
@@ -60,11 +62,11 @@ public class PointsDelegateTest {
 
     @Test
     public void getPoints_zero() {
-        Mockito.when(customerRepository.findAll()).thenReturn(getCustomers());
+        when(customerRepository.findAll()).thenReturn(getCustomers());
 
-        Mockito.when(transactionRepository.findAllFromDate(Mockito.any())).thenReturn(getTransactionsZero());
+        when(transactionRepository.findAllFromDate(any())).thenReturn(getTransactionsZero());
 
-        GetPointsResponse response = (GetPointsResponse) pointsDelegate.getPoints();
+        GetPointsResponse response = (GetPointsResponse) pointsDelegate.calculatePoints();
 
         Assertions.assertEquals(response.getStatus(), HttpStatus.OK);
         Assertions.assertEquals(response.getCustomerPointsList().get(0).getTotalPoints(), 0);
@@ -73,22 +75,22 @@ public class PointsDelegateTest {
 
     @Test
     public void zeroTransactions() {
-        Mockito.when(customerRepository.findAll()).thenReturn(getCustomers());
+        when(customerRepository.findAll()).thenReturn(getCustomers());
 
-        Mockito.when(transactionRepository.findAllFromDate(Mockito.any())).thenReturn(new ArrayList<>());
+        when(transactionRepository.findAllFromDate(any())).thenReturn(new ArrayList<>());
 
-        GetPointsResponse response = (GetPointsResponse) pointsDelegate.getPoints();
+        GetPointsResponse response = (GetPointsResponse) pointsDelegate.calculatePoints();
 
         Assertions.assertEquals(response.getStatus(), HttpStatus.OK);
     }
 
     @Test
     public void zeroCustomersAndTransactions() {
-        Mockito.when(customerRepository.findAll()).thenReturn(new ArrayList<>());
+        when(customerRepository.findAll()).thenReturn(new ArrayList<>());
 
-        Mockito.when(transactionRepository.findAllFromDate(Mockito.any())).thenReturn(new ArrayList<>());
+        when(transactionRepository.findAllFromDate(any())).thenReturn(new ArrayList<>());
 
-        GetPointsResponse response = (GetPointsResponse) pointsDelegate.getPoints();
+        GetPointsResponse response = (GetPointsResponse) pointsDelegate.calculatePoints();
 
         Assertions.assertEquals(response.getStatus(), HttpStatus.OK);
     }
