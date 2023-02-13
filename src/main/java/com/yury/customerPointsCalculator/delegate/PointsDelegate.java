@@ -4,6 +4,7 @@ import com.yury.customerPointsCalculator.Response.BaseResponse;
 import com.yury.customerPointsCalculator.Response.GetPointsResponse;
 import com.yury.customerPointsCalculator.entity.Customer;
 import com.yury.customerPointsCalculator.entity.Transaction;
+import com.yury.customerPointsCalculator.exception.CustomerNotFoundException;
 import com.yury.customerPointsCalculator.pojo.CustomerPoints;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,17 +24,17 @@ public class PointsDelegate {
     @Autowired
     private PersistenceDelegate persistenceDelegate;
 
-    public BaseResponse calculatePoints() {
+    public BaseResponse getPointsResponse(final Long customerId) {
 
         GetPointsResponse response = new GetPointsResponse();
 
         List<CustomerPoints> customerPoints = new ArrayList<>();
 
-        Map<Long, Customer> customersMap = getCustomersMap();
+        Map<Long, Customer> customersMap = getCustomersMap(customerId);
 
         List<String> months = getMonths();
 
-        List<Transaction> transactions = persistenceDelegate.getTransactionRepository().findAllFromDate(getStartDate());
+        List<Transaction> transactions = getTransactions(customerId);
 
         Map<Long, List<Transaction>> customerTransactionsMap = getCustomerTransactionsMap(transactions, customersMap);
 
@@ -47,6 +48,15 @@ public class PointsDelegate {
         response.setStatus(HttpStatus.OK);
 
         return response;
+    }
+
+    private List<Transaction> getTransactions(final Long customerId) {
+
+        if (customerId != null) {
+            return persistenceDelegate.getTransactionRepository().findAllFromDateAndCustomerId(getStartDate(), customerId);
+        }
+
+        return persistenceDelegate.getTransactionRepository().findAllFromDate(getStartDate());
     }
 
     private Map<String, Long> getEmptyMonthlyPointsMap(List<String> months) {
@@ -74,9 +84,21 @@ public class PointsDelegate {
         return months;
     }
 
-    private Map<Long, Customer> getCustomersMap() {
+    private Map<Long, Customer> getCustomersMap(final Long customerId) {
 
         Map<Long, Customer> customersMap = new HashMap<>();
+
+        if (customerId != null) {
+            Optional<Customer> optionalCustomer = persistenceDelegate.getCustomerRepository().findById(customerId);
+
+            if (optionalCustomer.isPresent()) {
+                customersMap.put(customerId, optionalCustomer.get());
+                return customersMap;
+
+            } else {
+                throw new CustomerNotFoundException(customerId);
+            }
+        }
 
         for (Customer customer : persistenceDelegate.getCustomerRepository().findAll()) {
 

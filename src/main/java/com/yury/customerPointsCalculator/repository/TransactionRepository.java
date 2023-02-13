@@ -12,4 +12,7 @@ public interface TransactionRepository extends CrudRepository<Transaction, Long>
     @Query("SELECT s FROM Transaction s WHERE date >= ?1")
     List<Transaction> findAllFromDate(Date date);
 
+    @Query("SELECT s FROM Transaction s WHERE date >= ?1 AND customerId = ?2")
+    List<Transaction> findAllFromDateAndCustomerId(Date date, Long customerId);
+
 }
