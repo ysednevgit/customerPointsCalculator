@@ -1,7 +1,7 @@
 package com.yury.customerPointsCalculator.delegate;
 
-import com.yury.customerPointsCalculator.Response.BaseResponse;
-import com.yury.customerPointsCalculator.Response.GetPointsResponse;
+import com.yury.customerPointsCalculator.response.BaseResponse;
+import com.yury.customerPointsCalculator.response.GetPointsResponse;
 import com.yury.customerPointsCalculator.entity.Customer;
 import com.yury.customerPointsCalculator.entity.Transaction;
 import com.yury.customerPointsCalculator.exception.CustomerNotFoundException;

@@ -9,5 +9,4 @@ public class CustomerPointsCalculator {
 	public static void main(String[] args) {
 		SpringApplication.run(CustomerPointsCalculator.class, args);
 	}
-
 }

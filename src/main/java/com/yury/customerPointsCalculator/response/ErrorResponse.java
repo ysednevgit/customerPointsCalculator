@@ -1,4 +1,4 @@
-package com.yury.customerPointsCalculator.Response;
+package com.yury.customerPointsCalculator.response;
 
 import lombok.Data;
 import org.springframework.http.HttpStatus;

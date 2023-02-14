@@ -1,6 +1,6 @@
 package com.yury.customerPointsCalculator.unitests;
 
-import com.yury.customerPointsCalculator.Response.GetPointsResponse;
+import com.yury.customerPointsCalculator.response.GetPointsResponse;
 import com.yury.customerPointsCalculator.delegate.PersistenceDelegate;
 import com.yury.customerPointsCalculator.delegate.PointsDelegate;
 import com.yury.customerPointsCalculator.entity.Customer;

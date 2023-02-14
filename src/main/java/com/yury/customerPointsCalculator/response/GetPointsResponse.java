@@ -1,4 +1,4 @@
-package com.yury.customerPointsCalculator.Response;
+package com.yury.customerPointsCalculator.response;
 
 import com.yury.customerPointsCalculator.pojo.CustomerPoints;
 import lombok.Data;

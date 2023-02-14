@@ -19,7 +19,7 @@ class CustomerPointsCalculatorTests {
     @Test
     void testMainControllerPointsByCustomerId() {
         HttpEntity<String> entity = new HttpEntity<>(null, new HttpHeaders());
-        ResponseEntity<String> response = new RestTemplate().exchange("http://localhost:8080/points/1",
+        ResponseEntity<String> response = new RestTemplate().exchange("http://localhost:8080/customers/1/points",
                 HttpMethod.GET, entity, String.class);
 
         Assertions.assertEquals(response.getStatusCode(), HttpStatus.OK);
@@ -45,7 +45,7 @@ class CustomerPointsCalculatorTests {
     @Test
     void testMainControllerPoints() {
         HttpEntity<String> entity = new HttpEntity<>(null, new HttpHeaders());
-        ResponseEntity<String> response = new RestTemplate().exchange("http://localhost:8080/points",
+        ResponseEntity<String> response = new RestTemplate().exchange("http://localhost:8080/customers/points",
                 HttpMethod.GET, entity, String.class);
 
         Assertions.assertEquals(response.getStatusCode(), HttpStatus.OK);
