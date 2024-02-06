@@ -3,8 +3,7 @@ package com.yury.customerPointsCalculator.entity;
 import com.sun.istack.NotNull;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
 
@@ -21,8 +20,9 @@ public class Transaction {
     @NotNull
     private Date date;
 
-    @NotNull
-    private Long customerId;
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
     public Transaction() {
     }

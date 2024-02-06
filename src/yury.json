@@ -1,0 +1,18 @@
+{
+  "status": "OK",
+  "customerPointsList": [
+    {
+      "customer": {
+        "id": 2,
+        "firstName": "Ivan",
+        "lastName": "Korob"
+      },
+      "totalPoints": 180,
+      "monthlyPointsMap": {
+        "FEBRUARY": 150,
+        "JANUARY": 30,
+        "DECEMBER": 0
+      }
+    }
+  ]
+}

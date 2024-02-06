@@ -1,9 +1,10 @@
 package com.yury.customerPointsCalculator.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -16,6 +17,11 @@ public class Customer {
     private String firstName;
 
     private String lastName;
+
+    @OneToMany
+    @JoinColumn(name = "customer_id")
+    @JsonIgnore
+    private List<Transaction> transactions;
 
     @Override
     public boolean equals(Object o) {
